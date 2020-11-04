@@ -110,7 +110,11 @@ procedure main()
               }
             }
          inline ? {
-           if =":edit" then {
+           if =":edit all" then {
+              prog := Edit(prog)
+              next
+              }
+           else if =":edit" then {
               src := prog[-1][1:-1]
               src := replace(src, "\n#", "\n")
               src ? {
@@ -118,10 +122,6 @@ procedure main()
                  line := atos(Edit([tab(0)]), "\n") &
                  break
                  }
-              }
-           else if =":edit all" then {
-              prog := Edit(prog)
-              next
               }
            else if =":link" then {
               push(header, inline[2:0] ? tab(upto(';') | 0))
@@ -182,10 +182,11 @@ procedure main()
 
 $ifdef _MS_WINDOWS
       sc :=  system("wicont -s qei_.icn " || atos(incfiles, " "))
+      if sc = 0 then rc := system("qei_")
 $else
       sc :=  system("icont -s qei_.icn " || atos(incfiles, " "))
+      if sc = 0 then rc := system("./qei_")
 $endif
-      if sc = 0 then rc := system("qei_")
 
       if sc = 0 & rc = 0 then
          put(prog, curexp)
